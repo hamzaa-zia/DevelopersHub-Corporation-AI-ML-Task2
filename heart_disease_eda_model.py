@@ -7,6 +7,7 @@ them, and saves the most important outputs for reporting.
 """
 
 from pathlib import Path
+from textwrap import wrap
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -49,6 +50,48 @@ FEATURE_LABELS = {
     "slope": "Peak exercise ST slope",
     "ca": "Number of major vessels",
     "thal": "Thalassemia test result",
+}
+
+MEDICAL_FEATURE_GROUPS = {
+    "Patient Profile": {
+        "summary": "Basic patient characteristics used as model inputs.",
+        "items": [
+            ("age", "Patient age in years."),
+            ("sex", "Biological sex code: 0 = female, 1 = male."),
+        ],
+    },
+    "Symptoms and Exercise Response": {
+        "summary": "Signals related to chest pain and exercise stress response.",
+        "items": [
+            ("cp", "Chest pain type code from 0 to 3."),
+            ("exang", "Exercise-induced angina: 0 = no, 1 = yes."),
+            ("thalach", "Maximum heart rate achieved during exercise."),
+            ("oldpeak", "ST depression during exercise compared with rest."),
+            ("slope", "Slope category of the peak exercise ST segment."),
+        ],
+    },
+    "Clinical Measurements": {
+        "summary": "Routine measurements that describe cardiovascular risk factors.",
+        "items": [
+            ("trestbps", "Resting blood pressure measured in mm Hg."),
+            ("chol", "Serum cholesterol measured in mg/dL."),
+            ("fbs", "Fasting blood sugar: 1 means above 120 mg/dL."),
+        ],
+    },
+    "Diagnostic Test Results": {
+        "summary": "Encoded results from ECG, fluoroscopy, and thalassemia-related testing.",
+        "items": [
+            ("restecg", "Resting ECG result category from 0 to 2."),
+            ("ca", "Number of major vessels colored by fluoroscopy, 0 to 4."),
+            ("thal", "Thalassemia or blood-flow test category."),
+        ],
+    },
+    "Prediction Target": {
+        "summary": "The label the classification models learn to predict.",
+        "items": [
+            ("target", "0 = no heart disease risk, 1 = heart disease risk."),
+        ],
+    },
 }
 
 CATEGORY_VALUE_NOTES = {
@@ -187,6 +230,97 @@ def create_eda_plots(df: pd.DataFrame) -> None:
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.08)
     plt.savefig(OUTPUT_DIR / "correlation_heatmap.png", dpi=160)
+    plt.close()
+
+
+def create_medical_feature_reference_chart() -> None:
+    """Create a grouped visual reference for the medical dataset columns."""
+    fig, ax = plt.subplots(figsize=(18, 12))
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.axis("off")
+
+    fig.suptitle("Medical Feature Reference for Heart Disease Prediction", fontsize=21, fontweight="bold")
+    ax.text(
+        0.5,
+        0.94,
+        "A quick guide to the dataset columns, their medical meaning, and how they connect to the prediction target.",
+        ha="center",
+        fontsize=12,
+        color="#34495e",
+    )
+
+    card_positions = [
+        (0.04, 0.58, 0.28, 0.29),
+        (0.36, 0.49, 0.28, 0.38),
+        (0.68, 0.58, 0.28, 0.29),
+        (0.06, 0.17, 0.40, 0.30),
+        (0.56, 0.17, 0.36, 0.30),
+    ]
+    colors = ["#e8f3ff", "#eef8ee", "#fff3df", "#f4edff", "#ffecec"]
+    edge_colors = ["#2d6cdf", "#2f8f46", "#c47f12", "#7b4fc4", "#c0392b"]
+
+    for (group_name, group), (x, y, width, height), color, edge_color in zip(
+        MEDICAL_FEATURE_GROUPS.items(),
+        card_positions,
+        colors,
+        edge_colors,
+    ):
+        rectangle = plt.Rectangle((x, y), width, height, facecolor=color, edgecolor=edge_color, linewidth=2)
+        ax.add_patch(rectangle)
+        ax.text(x + 0.017, y + height - 0.035, group_name, fontsize=13, fontweight="bold", va="top", color="#1f2d3d")
+
+        summary_lines = wrap(group["summary"], width=46)
+        current_y = y + height - 0.07
+        for line in summary_lines:
+            ax.text(x + 0.017, current_y, line, fontsize=8.8, va="top", color="#34495e")
+            current_y -= 0.024
+
+        current_y -= 0.012
+        for column, meaning in group["items"]:
+            wrapped_meaning = wrap(meaning, width=42 if width >= 0.34 else 34)
+            ax.text(
+                x + 0.018,
+                current_y,
+                column,
+                fontsize=9.5,
+                fontweight="bold",
+                va="top",
+                color=edge_color,
+            )
+            ax.text(
+                x + 0.075,
+                current_y,
+                wrapped_meaning[0],
+                fontsize=8.8,
+                va="top",
+                color="#1f2d3d",
+            )
+            current_y -= 0.027
+            for continuation in wrapped_meaning[1:]:
+                ax.text(x + 0.075, current_y, continuation, fontsize=8.8, va="top", color="#1f2d3d")
+                current_y -= 0.024
+            current_y -= 0.004
+
+    ax.annotate(
+        "",
+        xy=(0.56, 0.32),
+        xytext=(0.46, 0.32),
+        arrowprops={"arrowstyle": "->", "linewidth": 2.1, "color": "#34495e"},
+    )
+    ax.text(0.51, 0.345, "features feed into model", ha="center", fontsize=10, color="#34495e", fontweight="bold")
+    ax.text(
+        0.5,
+        0.08,
+        "Interpretation note: higher clinical values are not automatically a diagnosis. The model studies patterns across all features together.",
+        ha="center",
+        fontsize=10.5,
+        color="#34495e",
+        bbox={"boxstyle": "round,pad=0.45", "facecolor": "#f8f9fa", "edgecolor": "#bdc3c7"},
+    )
+
+    plt.tight_layout()
+    plt.savefig(OUTPUT_DIR / "medical_feature_reference.png", dpi=180)
     plt.close()
 
 
@@ -345,6 +479,7 @@ def main() -> None:
     cleaned_df = clean_dataset(df)
     save_dataset_summary(df, cleaned_df)
     create_eda_plots(cleaned_df)
+    create_medical_feature_reference_chart()
 
     X = cleaned_df.drop(columns=[TARGET_COLUMN])
     y = cleaned_df[TARGET_COLUMN]
