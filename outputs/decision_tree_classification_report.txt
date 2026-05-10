@@ -1,0 +1,15 @@
+Decision Tree Classification Report
+===================================
+
+              precision    recall  f1-score   support
+
+  No disease       0.79      0.89      0.84        47
+     Disease       0.89      0.79      0.84        53
+
+    accuracy                           0.84       100
+   macro avg       0.84      0.84      0.84       100
+weighted avg       0.85      0.84      0.84       100
+
+Confusion matrix:
+[[42  5]
+ [11 42]]

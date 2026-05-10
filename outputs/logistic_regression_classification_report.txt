@@ -1,0 +1,15 @@
+Logistic Regression Classification Report
+=========================================
+
+              precision    recall  f1-score   support
+
+  No disease       0.94      0.94      0.94        47
+     Disease       0.94      0.94      0.94        53
+
+    accuracy                           0.94       100
+   macro avg       0.94      0.94      0.94       100
+weighted avg       0.94      0.94      0.94       100
+
+Confusion matrix:
+[[44  3]
+ [ 3 50]]
