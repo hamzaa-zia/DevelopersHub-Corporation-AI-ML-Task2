@@ -2,13 +2,17 @@
 
 This project performs exploratory data analysis and builds classification models to predict heart disease risk from a Kaggle heart disease dataset. The workflow covers data cleaning, medical feature interpretation, EDA visualizations, Logistic Regression, Decision Tree classification, ROC-AUC evaluation, confusion matrices, and feature importance analysis.
 
-## Dataset Overview
+---
+
+## 📊 Dataset Overview
 
 The dataset is stored in `heart.csv` and contains 499 patient records with 14 columns. The target column is `target`, where `1` represents patients with heart disease risk and `0` represents patients without heart disease risk.
 
 The dataset has no missing values, but the script still includes a cleaning step so the workflow remains complete and reproducible.
 
-## Medical Features
+---
+
+## 🫀 Medical Features
 
 | Column | Meaning |
 |---|---|
@@ -27,7 +31,9 @@ The dataset has no missing values, but the script still includes a cleaning step
 | `thal` | Thalassemia or blood-flow test category used in the dataset. |
 | `target` | Binary prediction label: `1 = heart disease risk`, `0 = no heart disease risk`. |
 
-## Tools and Libraries
+---
+
+## 🧰 Tools and Libraries
 
 - `pandas`: Loads the CSV file, inspects rows and columns, checks missing values, separates features from the target, and saves result tables.
 - `matplotlib`: Creates and saves charts such as the target distribution, ROC curve, confusion matrix, and feature importance plots.
@@ -47,13 +53,17 @@ Important `scikit-learn` functions used:
 - `roc_curve` and `roc_auc_score`: Measure how well the model separates risky and non-risky patients.
 - `classification_report`: Reports precision, recall, and F1-score for both classes.
 
-## Learning Resources
+---
+
+## 📚 Learning Resources
 
 - Logistic Regression: learned from Gate Smashers.
 - Decision Tree: learned from Gate Smashers.
 - ROC-AUC and ROC Curve: learned from Nomiqo.
 
-## Workflow
+---
+
+## 🔄 Workflow
 
 1. Load `heart.csv` using `pandas`.
 2. Check dataset shape, columns, data types, missing values, and target distribution.
@@ -67,7 +77,9 @@ Important `scikit-learn` functions used:
 8. Evaluate both models using accuracy, confusion matrix, ROC curve, and ROC-AUC.
 9. Save model reports, plots, metrics, and feature importance outputs in the `outputs` folder.
 
-## Model Results
+---
+
+## 📈 Model Results
 
 The script trained and tested both models on the current dataset split.
 
@@ -78,7 +90,9 @@ The script trained and tested both models on the current dataset split.
 
 Logistic Regression performed better on this split. It achieved 94% accuracy and a ROC-AUC score of 0.983, which means it separated the two classes very well on the test data.
 
-## Confusion Matrix Interpretation
+---
+
+## 🧪 Confusion Matrix Interpretation
 
 For Logistic Regression:
 
@@ -91,7 +105,9 @@ For Logistic Regression:
 
 In medical prediction, false negatives are especially important because they represent patients who may have heart disease risk but were predicted as no disease. Logistic Regression produced 3 false negatives on the test set.
 
-## Important Features
+---
+
+## ⭐ Important Features
 
 The strongest Logistic Regression signals included:
 
@@ -110,7 +126,9 @@ The strongest Decision Tree signals included:
 
 These results suggest that chest pain type, vessel information, thalassemia-related test category, and stress-test response are major contributors to the prediction.
 
-## Project Structure
+---
+
+## 🗂️ Project Structure
 
 ```text
 .
@@ -122,6 +140,7 @@ These results suggest that chest pain type, vessel information, thalassemia-rela
     |-- dataset_summary.txt
     |-- model_metrics.csv
     |-- target_distribution.png
+    |-- medical_feature_reference.png
     |-- numeric_feature_distributions.png
     |-- categorical_feature_trends.png
     |-- correlation_heatmap.png
@@ -132,7 +151,9 @@ These results suggest that chest pain type, vessel information, thalassemia-rela
     `-- decision_tree_feature_importance.png
 ```
 
-## How to Run
+---
+
+## ▶️ How to Run
 
 Install the required libraries:
 
@@ -148,10 +169,13 @@ python heart_disease_eda_model.py
 
 After running the script, all reports and charts are saved in the `outputs` folder.
 
-## Generated Outputs
+---
+
+## 🖼️ Generated Outputs
 
 - `dataset_summary.txt`: Dataset shape, columns, missing values, target distribution, and descriptive statistics.
 - `target_distribution.png`: Shows the balance between heart disease and no heart disease cases.
+- `medical_feature_reference.png`: Summarizes the medical dataset columns by patient profile, symptoms, clinical measurements, diagnostic tests, and target variable.
 - `numeric_feature_distributions.png`: Shows how numeric features vary across target classes.
 - `categorical_feature_trends.png`: Compares categorical medical features with the target.
 - `correlation_heatmap.png`: Shows relationships between numeric columns.
@@ -161,13 +185,16 @@ After running the script, all reports and charts are saved in the `outputs` fold
 - `logistic_regression_feature_importance.png`: Shows top Logistic Regression feature signals.
 - `decision_tree_feature_importance.png`: Shows top Decision Tree feature signals.
 
-## Chart Interpretation Guide
+---
+
+## 🔍 Chart Interpretation Guide
 
 The PNG charts include labels, legends, or notes where possible. The details below explain what the numerical values mean.
 
 | Chart | What the Numbers Represent |
 |---|---|
 | `target_distribution.png` | The bar labels show the number of patients in each target class. `0` means no heart disease risk and `1` means heart disease risk. |
+| `medical_feature_reference.png` | Groups the dataset columns by medical meaning. It explains whether each feature represents patient profile, symptoms, clinical measurements, diagnostic test results, or the prediction target. |
 | `numeric_feature_distributions.png` | The x-axis shows actual medical values such as age, cholesterol, resting blood pressure, maximum heart rate, or ST depression. The y-axis shows how many patients fall within each value range. |
 | `categorical_feature_trends.png` | The x-axis shows encoded category values. For example, `sex` uses `0` and `1`, `exang` uses `0 = no` and `1 = yes`, and columns like `cp`, `restecg`, `slope`, `ca`, and `thal` use medical category codes from the dataset. |
 | `correlation_heatmap.png` | Correlation values range from `-1` to `+1`. A positive value means two columns increase together, a negative value means one tends to decrease when the other increases, and values close to `0` show weak linear relationship. |
@@ -179,6 +206,8 @@ The PNG charts include labels, legends, or notes where possible. The details bel
 
 Encoded feature names in importance charts use the format `feature_value`. For example, `cp_0` means chest pain type category `0`, and `thal_3` means thalassemia test category `3`.
 
-## Notes
+---
+
+## ⚠️ Notes
 
 This model is built for learning and analysis. It should not be used as a real medical diagnosis system. Real clinical prediction requires expert validation, larger patient samples, external testing, and careful handling of medical risk.
