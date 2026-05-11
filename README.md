@@ -128,29 +128,6 @@ These results suggest that chest pain type, vessel information, thalassemia-rela
 
 ---
 
-## 🗂️ Project Structure
-
-```text
-.
-|-- heart.csv
-|-- heart_disease_eda_model.py
-|-- requirements.txt
-|-- README.md
-`-- outputs/
-    |-- dataset_summary.txt
-    |-- model_metrics.csv
-    |-- target_distribution.png
-    |-- medical_feature_reference.png
-    |-- numeric_feature_distributions.png
-    |-- categorical_feature_trends.png
-    |-- correlation_heatmap.png
-    |-- roc_curve_comparison.png
-    |-- logistic_regression_confusion_matrix.png
-    |-- decision_tree_confusion_matrix.png
-    |-- logistic_regression_feature_importance.png
-    `-- decision_tree_feature_importance.png
-```
-
 ---
 
 ## ▶️ How to Run
